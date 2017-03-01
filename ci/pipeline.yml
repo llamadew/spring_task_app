@@ -3,7 +3,7 @@ resources:
 - name: web-app
   type: git
   source:
-    uri: https://github.com/slhommed/spring_task_app.git
+    uri: git@github.com:slhommed/spring_task_app.git
     private_key: {{repo-private-key}}
 
 #- name: deploy-web-app
