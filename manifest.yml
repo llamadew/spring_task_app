@@ -6,3 +6,4 @@ applications:
   buildpack: java_buildpack
   path: ./build/libs/demo-task-0.1.0.jar
   no-route: true -t 180
+  domain: lhomm.com

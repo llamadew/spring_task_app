@@ -6,15 +6,15 @@ resources:
     uri: git@github.com:slhommed/spring_task_app.git
     private_key: {{repo-private-key}}
 
-#- name: deploy-web-app
-#  type: cf
-#  source:
-#    api: {{cf-api}}
-#  username: {{cf-username}}
-#    password: {{cf-password}}
-#    organization: {{cf-organization}}
-#    space: {{cf-space}}
-#    skip_cert_check: true
+- name: deploy-web-app
+  type: cf
+  source:
+    api: {{cf-api}}
+    username: {{cf-username}}
+    password: {{cf-password}}
+    organization: {{cf-organization}}
+    space: {{cf-space}}
+    skip_cert_check: true
 
 jobs:
 - name: build-app
@@ -26,7 +26,22 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: busybox}
+        source: {repository: springcloud/pipeline-base}
+      inputs:
+      - name: web-app
+      outputs:
+      - name: build
       run:
-        path: web-app/gradlew
+        dir: web-app
+        path: ./gradlew
         args: [assemble]
+- name: deploy-app
+  serial: true
+  plan:
+    - get: web-app
+    - put: deploy-web-app
+      inputs:
+      - name: web-app
+      - name: build
+      params:
+        manifest: web-app/manifest.yml
