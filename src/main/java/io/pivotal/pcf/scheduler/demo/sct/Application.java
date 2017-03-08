@@ -1,4 +1,4 @@
-package hello;
+package io.pivotal.pcf.scheduler.demo.sct;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;

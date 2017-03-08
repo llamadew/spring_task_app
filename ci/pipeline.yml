@@ -17,7 +17,7 @@ resources:
     skip_cert_check: true
 
 jobs:
-- name: build-app
+- name: assemble-app
   serial: true
   plan:
   - get: web-app
@@ -30,18 +30,34 @@ jobs:
       inputs:
       - name: web-app
       outputs:
-      - name: build
+      - name: app-build
       run:
         dir: web-app
-        path: ./gradlew
-        args: [assemble]
-- name: deploy-app
-  serial: true
-  plan:
-    - get: web-app
-    - put: deploy-web-app
+        path: sh
+        args:
+        - -exc
+        - |
+          ./gradlew  assemble
+          rsync -av ./manifest.yml app-build/
+          rsync -avr ./build/ app-build/build/
+          ls -al app-build/
+  - task: build-app
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: busybox}
       inputs:
-      - name: web-app
-      - name: build
-      params:
-        manifest: web-app/manifest.yml
+      - name: app-build
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          ls -al app-build/
+  - put: deploy-web-app
+    inputs:
+    - name: app-build
+    params:
+      manifest: app-build/manifest.yml
+

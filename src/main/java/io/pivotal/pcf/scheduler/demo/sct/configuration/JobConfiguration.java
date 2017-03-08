@@ -1,4 +1,4 @@
-package hello.configuration;
+package io.pivotal.pcf.scheduler.demo.sct.configuration;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,7 +30,7 @@ public class JobConfiguration {
 					.tasklet(new Tasklet() {
 						@Override
 						public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-							logger.info("HelloJob says Hello");
+							logger.error("Hello Hello");
 							return RepeatStatus.FINISHED;
 						}
 					})
@@ -45,7 +45,7 @@ public class JobConfiguration {
 					.tasklet(new Tasklet() {
 						@Override
 						public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-							logger.info("GoodbyeJob says Goodbye");
+							logger.error("I don't know why you say goodbye, I say hello");
 							return RepeatStatus.FINISHED;
 						}
 					})
